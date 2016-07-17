@@ -6,6 +6,6 @@ namespace PHPHtmlParser\Exceptions;
  *
  * @package PHPHtmlParser\Exceptions
  */
-final class StrictException extends \Exception
+class StrictException extends PHPHtmlParserException
 {
 }

@@ -6,6 +6,6 @@ namespace PHPHtmlParser\Exceptions;
  *
  * @package PHPHtmlParser\Exceptions
  */
-final class UnknownChildTypeException extends \Exception
+class UnknownChildTypeException extends PHPHtmlParserException
 {
 }

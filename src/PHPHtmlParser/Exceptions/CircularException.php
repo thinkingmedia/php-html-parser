@@ -6,6 +6,6 @@ namespace PHPHtmlParser\Exceptions;
  *
  * @package PHPHtmlParser\Exceptions
  */
-final class CircularException extends \Exception
+class CircularException extends PHPHtmlParserException
 {
 }
