@@ -614,34 +614,26 @@ class Dom
             //  they want to enforce the given encoding
             $encode->from($this->options->enforceEncoding);
             $encode->to($this->options->enforceEncoding);
-
             return false;
         }
 
-        $meta = $this->root->find('meta[http-equiv=Content-Type]', 0);
-        if (is_null($meta)) {
-            // could not find meta tag
+        try {
+            $meta = $this->root->find('meta[charset]', 0);
+            if (!is_null($meta) && !empty($meta->charset)) {
+                $encode->from(strtoupper(trim($meta->charset)));
+                return true;
+            }
+            $meta = $this->root->find('meta[http-equiv=Content-Type]', 0);
+            if (!is_null($meta) && !empty($meta->content)) {
+                $matches = [];
+                if (preg_match('/charset=([^;]+)/', $meta->content, $matches)) {
+                    $encode->from(strtoupper(trim($matches[1])));
+                    return true;
+                }
+            }
+        } finally {
             $this->root->propagateEncoding($encode);
-
-            return false;
         }
-        $content = $meta->content;
-        if (empty($content)) {
-            // could not find content
-            $this->root->propagateEncoding($encode);
-
-            return false;
-        }
-        $matches = [];
-        if (preg_match('/charset=(.+)/', $content, $matches)) {
-            $encode->from(trim($matches[1]));
-            $this->root->propagateEncoding($encode);
-
-            return true;
-        }
-
-        // no charset found
-        $this->root->propagateEncoding($encode);
 
         return false;
     }
